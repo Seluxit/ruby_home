@@ -41,12 +41,8 @@ module RubyHome
     def handle_request(client_socket)
       begin
         if request_line = client_socket.gets
-          verb    = request_line[/^\w+/]
-          path    = request_line[/^\w+\s+(\S+)/, 1]
-          version = request_line[/HTTP\/(1\.\d)\s*$/, 1]
-
           server_socket = TCPSocket.new(remote_name, remote_port)
-          server_socket.write("#{verb} #{path} HTTP/#{version}\r\n")
+          server_socket.write(request_line)
           server_socket.write("Host: #{remote_name}:#{remote_port}\r\n")
           server_socket.write("Connection: close\r\n")
           server_socket.write("\r\n")
